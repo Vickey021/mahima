@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Details - Buy and Sell Records</title>
+  <style>
+    /* Basic Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f7fc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .details-container {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .details-container h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Back to Dashboard Button */
+    .back-button {
+      padding: 1rem;
+      background-color: #2575fc;
+      color: #fff;
+      text-align: center;
+      text-decoration: none;
+      font-size: 1rem;
+      border-radius: 4px;
+      margin-bottom: 2rem;
+      transition: background 0.3s;
+    }
+
+    .back-button:hover {
+      background-color: #1a5cc8;
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 2rem;
+    }
+
+    .table th, .table td {
+      padding: 1rem;
+      border: 1px solid #ccc;
+      text-align: center;
+    }
+
+    .table th {
+      background-color: #2575fc;
+      color: white;
+    }
+
+    /* Responsive Design for small screens */
+    @media (max-width: 768px) {
+      .details-container {
+        padding: 1rem;
+      }
+
+      .table {
+        display: block;
+      }
+
+      .table thead {
+        display: none;
+      }
+
+      .table tbody {
+        display: block;
+      }
+
+      .table tr {
+        display: block;
+        margin-bottom: 1rem;
+        background-color: #f9f9f9;
+        border-radius: 4px;
+      }
+
+      .table td {
+        display: block;
+        text-align: left;
+        padding: 0.8rem;
+        font-size: 0.9rem;
+        border: none;
+        border-bottom: 1px solid #ccc;
+      }
+
+      .table td::before {
+        content: attr(data-label);
+        font-weight: bold;
+        margin-right: 0.5rem;
+      }
+    }
+
+    /* Additional Styles for Small Screen */
+    @media (max-width: 480px) {
+      .table td {
+        font-size: 0.8rem;
+      }
+
+      .table td::before {
+        font-weight: bold;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="details-container">
+    <h1>Buy and Sell Records</h1>
+
+    <!-- Back to Dashboard Button -->
+    <a href="/dashboard" class="back-button">Back to Dashboard</a>
+
+    <!-- Buy Records Table -->
+    <h2>Buy Records</h2>
+    <table class="table" id="buyTable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Product Name</th>
+          <th>Party Name</th>
+          <th>Rate</th>
+          <th>Payment Status</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody id="buyTableBody">
+        <!-- Buy records will be loaded dynamically -->
+      </tbody>
+    </table>
+
+    <!-- Sell Records Table -->
+    <h2>Sell Records</h2>
+    <table class="table" id="sellTable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Product Name</th>
+          <th>Party Name</th>
+          <th>Rate</th>
+          <th>Payment Status</th>
+          <th>Date</th>
+          <th>Sold Product</th>
+        </tr>
+      </thead>
+      <tbody id="sellTableBody">
+        <!-- Sell records will be loaded dynamically -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    // Function to load buy records from the database
+    async function loadBuyRecords() {
+      const response = await fetch('/api/buy');
+      const data = await response.json();
+      const tableBody = document.getElementById('buyTableBody');
+      tableBody.innerHTML = '';
+
+      data.forEach(record => {
+        const row = document.createElement('tr');
+        row.innerHTML = ` 
+          <td data-label="ID">${record.id}</td>
+          <td data-label="Product Name">${record.product_name}</td>
+          <td data-label="Party Name">${record.party_name}</td>
+          <td data-label="Rate">${record.rate}</td>
+          <td data-label="Payment Status">${record.payment_status}</td>
+          <td data-label="Date">${record.date}</td>
+        `;
+        tableBody.appendChild(row);
+      });
+    }
+
+    // Function to load sell records from the database
+    async function loadSellRecords() {
+      const response = await fetch('/api/sell');
+      const data = await response.json();
+      const tableBody = document.getElementById('sellTableBody');
+      tableBody.innerHTML = '';
+
+      data.forEach(record => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td data-label="ID">${record.id}</td>
+          <td data-label="Product Name">${record.product_name}</td>
+          <td data-label="Party Name">${record.party_name}</td>
+          <td data-label="Rate">${record.rate}</td>
+          <td data-label="Payment Status">${record.payment_status}</td>
+          <td data-label="Date">${record.date}</td>
+          <td data-label="Sold Product">${record.sold_product_name || 'N/A'}</td>
+        `;
+        tableBody.appendChild(row);
+      });
+    }
+
+    // Load both buy and sell records on page load
+    window.onload = function() {
+      loadBuyRecords();
+      loadSellRecords();
+    };
+  </script>
+
+</body>
+</html>
