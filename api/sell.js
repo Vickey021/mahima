@@ -3,22 +3,19 @@ const pool = require('../db');
 const router = express.Router();
 
 // Get all sell records
- // Example of the /api/sell GET endpoint
- router.get('/api/sell', async (req, res) => {
+router.get('/', async (req, res) => {  // Removed '/api/sell'
   try {
     // Query the database to get all sales data
     const result = await pool.query('SELECT * FROM sell');
     res.status(200).json({ success: true, data: result.rows });
-    // console.log(result);
   } catch (err) {
     console.error('Error fetching sales:', err);
     res.status(500).json({ success: false, message: 'Error fetching sales data' });
   }
-  // console.log(result);
 });
 
 // Add a new sell record
-router.post('/api/sell', async (req, res) => {
+router.post('/', async (req, res) => {  // Removed '/api/sell'
   const { product_id, party_name, rate, date, payment_status } = req.body;
 
   try {
@@ -50,7 +47,7 @@ router.post('/api/sell', async (req, res) => {
 });
 
 // Update a sell record
-router.put('/api/sell/:id', async (req, res) => {
+router.put('/:id', async (req, res) => {  // Removed '/api/sell/:id'
   const { id } = req.params;
   const { product_id, product_name, party_name, rate, date, payment_status } = req.body;
   try {
@@ -65,8 +62,8 @@ router.put('/api/sell/:id', async (req, res) => {
   }
 });
 
- // Delete a sell record
- router.delete('/api/sell/:id', async (req, res) => {
+// Delete a sell record
+router.delete('/:id', async (req, res) => {  // Removed '/api/sell/:id'
   const { id } = req.params;
   try {
     await pool.query('DELETE FROM sell WHERE id = $1', [id]);
