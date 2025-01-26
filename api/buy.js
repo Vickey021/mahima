@@ -3,7 +3,7 @@ const pool = require('../db');  // Assuming DB connection in separate module
 const router = express.Router();
 
 // Get all buy records
-router.get('/api/buy', async (req, res) => {
+router.get('/', async (req, res) => {  // Removed '/api/buy'
   try {
     const result = await pool.query('SELECT * FROM buy');
     res.json(result.rows);
@@ -14,7 +14,7 @@ router.get('/api/buy', async (req, res) => {
 });
 
 // Add a new buy record
-router.post('/api/buy', async (req, res) => {
+router.post('/', async (req, res) => {  // Removed '/api/buy'
   const { product_name, party_name, rate, date, payment_status } = req.body;
 
   // Validation: Check for missing fields
@@ -34,9 +34,8 @@ router.post('/api/buy', async (req, res) => {
   }
 });
 
-// update buy record
- 
-router.put('/api/buy/:id', async (req, res) => {
+// Update buy record
+router.put('/:id', async (req, res) => {  // Removed '/api/buy/:id'
   const { id } = req.params;
   const { product_name, party_name, rate, payment_status, date } = req.body;
 
@@ -48,7 +47,6 @@ router.put('/api/buy/:id', async (req, res) => {
       `UPDATE buy SET product_name = $1, party_name = $2, rate = $3, payment_status = $4, date = $5 WHERE id = $6`,
       [product_name, party_name, rate, payment_status, utcDate, id]
     );
-    
 
     if (result.rowCount > 0) {
       res.json({ success: true });
@@ -61,8 +59,8 @@ router.put('/api/buy/:id', async (req, res) => {
   }
 });
 
- // Delete a buy record
- router.delete('/api/buy/:id', async (req, res) => {
+// Delete a buy record
+router.delete('/:id', async (req, res) => {  // Removed '/api/buy/:id'
   const { id } = req.params;
   try {
     await pool.query('DELETE FROM buy WHERE id = $1', [id]);
