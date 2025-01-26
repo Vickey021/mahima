@@ -13,7 +13,7 @@
     }
   ],
   "functions": {
-    "api/**/*.js": {
+    "index.js": {
       "timeout": 30
     }
   }
